@@ -6,24 +6,47 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import React, { Component } from "react";
+import { StyleSheet, Text, View, TextInput } from "react-native";
+import PlaceInput from "./src/components/PlaceInput/PlaceInput";
+import ListView from "./src/components/ListView/ListView";
 
 type Props = {};
 export default class App extends Component<Props> {
+  state = {
+    value: "",
+    places: []
+  };
+  handleTyping = value => {
+    this.setState({
+      ...this.state,
+      value: value
+    });
+  };
+  handleSubmit = () => {
+    this.setState(state => {
+      return {
+        places: state.places.concat({ value: state.value, key: Math.random() })
+      };
+    });
+  };
+  handleDelete = key => {
+    this.setState(state => {
+      return {
+        places: state.places.filter(place => {
+          return place.key != key;
+        })
+      };
+    });
+  };
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+        <PlaceInput
+          handleTyping={this.handleTyping}
+          handleSubmit={this.handleSubmit}
+        />
+        <ListView items={this.state.places} handleDelete={this.handleDelete} />
       </View>
     );
   }
@@ -32,18 +55,8 @@ export default class App extends Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+    padding: 20,
+    justifyContent: "flex-start",
+    alignItems: "center"
+  }
 });
