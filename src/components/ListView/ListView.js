@@ -9,8 +9,9 @@ export default function ListView(props) {
       data={props.items}
       renderItem={info => (
         <ListItem
-          value={info.item.value}
-          handleDelete={() => props.handleDelete(info.item.key)}
+          value={info.item.name}
+          handleSelect={() => props.handleSelect(info.item.key)}
+          image={info.item.image}
         />
       )}
     />
