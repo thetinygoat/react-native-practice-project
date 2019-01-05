@@ -16,13 +16,13 @@ type Props = {};
 export default class App extends Component<Props> {
   state = {
     value: "",
-    places: []
+    places: [],
+    selectedPlace: null
   };
   handleTyping = value => {
     this.setState({
       ...this.state,
-      value: value,
-      selectedPlace: null
+      value: value
     });
   };
   handleSubmit = () => {
@@ -47,18 +47,30 @@ export default class App extends Component<Props> {
         })
       };
     });
-    // this.setState(state => {
-    //   return {
-    //     places: state.places.filter(place => {
-    //       return place.key != key;
-    //     })
-    //   };
-    // });
+  };
+  handleDelete = () => {
+    this.setState(state => {
+      return {
+        places: state.places.filter(place => {
+          return place.key != state.selectedPlace.key;
+        }),
+        selectedPlace: null
+      };
+    });
+  };
+  handleModalClose = () => {
+    this.setState({
+      selectedPlace: null
+    });
   };
   render() {
     return (
       <View style={styles.container}>
-        <PlaceDetail selectedPlace={this.state.selectedPlace} />
+        <PlaceDetail
+          selectedPlace={this.state.selectedPlace}
+          handleDelete={this.handleDelete}
+          handleModalClose={this.handleModalClose}
+        />
         <PlaceInput
           handleTyping={this.handleTyping}
           handleSubmit={this.handleSubmit}
