@@ -11,75 +11,44 @@ import { StyleSheet, Text, View, TextInput } from "react-native";
 import PlaceInput from "./src/components/PlaceInput/PlaceInput";
 import ListView from "./src/components/ListView/ListView";
 import PlaceDetail from "./src/components/PlaceDetail/PlaceDetail";
+import * as placeActions from "./src/store/actions/places";
+import { connect } from "react-redux";
 
 type Props = {};
-export default class App extends Component<Props> {
-  state = {
-    value: "",
-    places: [],
-    selectedPlace: null
-  };
-  handleTyping = value => {
-    this.setState({
-      ...this.state,
-      value: value
-    });
-  };
-  handleSubmit = () => {
-    this.setState(state => {
-      return {
-        places: state.places.concat({
-          name: state.value,
-          key: Math.random().toString(),
-          image: {
-            uri:
-              "https://images.pexels.com/photos/1697306/pexels-photo-1697306.jpeg?auto=compress&cs=tinysrgb&h=650&w=940"
-          }
-        })
-      };
-    });
-  };
-  handleSelect = key => {
-    this.setState(state => {
-      return {
-        selectedPlace: state.places.find(place => {
-          return place.key === key;
-        })
-      };
-    });
-  };
-  handleDelete = () => {
-    this.setState(state => {
-      return {
-        places: state.places.filter(place => {
-          return place.key != state.selectedPlace.key;
-        }),
-        selectedPlace: null
-      };
-    });
-  };
-  handleModalClose = () => {
-    this.setState({
-      selectedPlace: null
-    });
-  };
+class App extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
         <PlaceDetail
-          selectedPlace={this.state.selectedPlace}
-          handleDelete={this.handleDelete}
-          handleModalClose={this.handleModalClose}
+          selectedPlace={this.props.selectedPlace}
+          handleDelete={() => this.props.handleDelete(key)}
+          handleModalClose={this.props.handleDeselect}
         />
-        <PlaceInput
-          handleTyping={this.handleTyping}
-          handleSubmit={this.handleSubmit}
+        <PlaceInput handleSubmit={() => this.props.handleAdd(placename)} />
+        <ListView
+          items={this.props.places}
+          handleSelect={() => this.props.handleSelect(key)}
         />
-        <ListView items={this.state.places} handleSelect={this.handleSelect} />
       </View>
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    places: state.places.places,
+    selectedPlace: state.places.selectedPlace
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    handleAdd: placename => dispatch(placeActions.addPlace(placename)),
+    handleDelete: key => dispatch(placeActions.deletePlace(key)),
+    handleSelect: key => dispatch(placeActions.selectPlace(key)),
+    handleDeselect: key => dispatch(placeActions.deselectPlace())
+  };
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -89,3 +58,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   }
 });
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);

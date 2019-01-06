@@ -1,20 +1,30 @@
-import React from "react";
+import React, { Component } from "react";
 import { View, TextInput, StyleSheet, Button } from "react-native";
-export default function(props) {
-  return (
-    <View style={styles.inputContainer}>
-      <TextInput
-        style={styles.placeinput}
-        onChangeText={props.handleTyping}
-        value={props.value}
-      />
-      <Button
-        title="Add"
-        style={styles.placeButton}
-        onPress={props.handleSubmit}
-      />
-    </View>
-  );
+class PlaceInput extends Component {
+  state = {
+    value: ""
+  };
+  onType = value => {
+    this.setState({
+      value: value
+    });
+  };
+  render() {
+    return (
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.placeinput}
+          onChangeText={this.onType}
+          value={this.state.value}
+        />
+        <Button
+          title="Add"
+          style={styles.placeButton}
+          onPress={() => this.props.handleSubmit(this.state.value)}
+        />
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -33,3 +43,5 @@ const styles = StyleSheet.create({
     alignItems: "center"
   }
 });
+
+export default PlaceInput;
