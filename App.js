@@ -21,13 +21,15 @@ class App extends Component<Props> {
       <View style={styles.container}>
         <PlaceDetail
           selectedPlace={this.props.selectedPlace}
-          handleDelete={() => this.props.handleDelete(key)}
+          handleDelete={key => this.props.handleDelete(key)}
           handleModalClose={this.props.handleDeselect}
         />
-        <PlaceInput handleSubmit={() => this.props.handleAdd(placename)} />
+        <PlaceInput
+          handleSubmit={placename => this.props.handleAdd(placename)}
+        />
         <ListView
           items={this.props.places}
-          handleSelect={() => this.props.handleSelect(key)}
+          handleSelect={key => this.props.handleSelect(key)}
         />
       </View>
     );
@@ -46,7 +48,7 @@ const mapDispatchToProps = dispatch => {
     handleAdd: placename => dispatch(placeActions.addPlace(placename)),
     handleDelete: key => dispatch(placeActions.deletePlace(key)),
     handleSelect: key => dispatch(placeActions.selectPlace(key)),
-    handleDeselect: key => dispatch(placeActions.deselectPlace())
+    handleDeselect: () => dispatch(placeActions.deselectPlace())
   };
 };
 

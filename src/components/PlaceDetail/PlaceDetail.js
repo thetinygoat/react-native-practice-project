@@ -1,5 +1,14 @@
 import React from "react";
-import { Text, View, Button, Modal, Image, StyleSheet } from "react-native";
+import {
+  Text,
+  View,
+  Button,
+  Modal,
+  Image,
+  StyleSheet,
+  TouchableNativeFeedback
+} from "react-native";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 const placeDetail = props => {
   let placeinfo = null;
@@ -24,7 +33,11 @@ const placeDetail = props => {
     >
       {placeinfo}
       <View>
-        <Button title="Delete" color="red" onPress={props.handleDelete} />
+        <TouchableNativeFeedback onPress={props.handleDelete}>
+          <View style={styles.deleteButton}>
+            <Icon size={30} name="delete" color="red" />
+          </View>
+        </TouchableNativeFeedback>
         <Button title="Cancel" onPress={props.handleModalClose} />
       </View>
     </Modal>
@@ -34,6 +47,9 @@ const placeDetail = props => {
 const styles = StyleSheet.create({
   placeInfoContainer: {
     justifyContent: "center",
+    alignItems: "center"
+  },
+  deleteButton: {
     alignItems: "center"
   }
 });

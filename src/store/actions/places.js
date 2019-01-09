@@ -6,6 +6,7 @@ export function addPlace(placeName) {
   };
 }
 export function deletePlace(key) {
+  console.log(placeKey);
   return {
     type: actionTypes.DELETE_PLACE,
     placeKey: key
